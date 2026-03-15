@@ -2,265 +2,263 @@
 <html>
 
 <head>
-<meta charset="UTF-8">
-<title>TaskFlow</title>
+    <meta charset="UTF-8">
+    <title>TaskFlow</title>
 
-<style>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background: linear-gradient(135deg,#15F4FE,#FF10F0);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-body{
-font-family:Segoe UI;
-background:linear-gradient(135deg,#1f4037,#99f2c8);
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+        .container {
+            width: 420px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 18px;
+            color: white;
+        }
 
-.container{
-width:420px;
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(12px);
-padding:30px;
-border-radius:18px;
-color:white;
-}
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-h1{
-text-align:center;
-margin-bottom:10px;
-}
+        .counter {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
 
-.counter{
-text-align:center;
-margin-bottom:15px;
-font-size:14px;
-}
+        .inputArea {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.inputArea{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
 
-input{
-flex:1;
-padding:10px;
-border-radius:8px;
-border:none;
-}
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
 
-button{
-cursor:pointer;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-}
+        .addBtn {
+            background: #00c6ff;
+            color: white;
+        }
 
-.addBtn{
-background:#00c6ff;
-color:white;
-}
+        .task {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
 
-.task{
-background:rgba(255,255,255,0.2);
-padding:10px;
-margin-bottom:8px;
-border-radius:8px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-transition:0.3s;
-}
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
 
-.completed{
-text-decoration:line-through;
-opacity:0.6;
-}
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.left{
-display:flex;
-align-items:center;
-gap:10px;
-}
+        .actions button {
+            margin-left: 5px;
+        }
 
-.actions button{
-margin-left:5px;
-}
+        .deleteBtn {
+            background: #ff4b5c;
+            color: white;
+        }
 
-.deleteBtn{
-background:#ff4b5c;
-color:white;
-}
-
-.editBtn{
-background:#ffaa00;
-color:white;
-}
-
-</style>
+        .editBtn {
+            background: #ffaa00;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h1>TaskFlow</h1>
+        <h1>TaskFlow</h1>
 
-<div class="counter" id="counter"></div>
+        <div class="counter" id="counter"></div>
 
-<div class="inputArea">
-<input id="taskInput" placeholder="Enter new task">
-<button class="addBtn" onclick="addTask()">Add</button>
-</div>
+        <div class="inputArea">
+            <input id="taskInput" placeholder="Enter new task">
+            <button class="addBtn" onclick="addTask()">Add</button>
+        </div>
 
-<ul id="taskList"></ul>
+        <ul id="taskList"></ul>
 
-</div>
+    </div>
 
-<script>
+    <script>
 
-async function addTask(){
+        async function addTask() {
 
-const text=document.getElementById("taskInput").value.trim()
+            const text = document.getElementById("taskInput").value.trim()
 
-if(text==="") return
+            if (text === "") return
 
-await fetch("http://localhost:3000/tasks",{
+            await fetch("http://localhost:3000/tasks", {
 
-method:"POST",
+                method: "POST",
 
-headers:{
-"Content-Type":"application/json"
-},
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-body:JSON.stringify({task:text})
+                body: JSON.stringify({ task: text })
 
-})
+            })
 
-document.getElementById("taskInput").value=""
+            document.getElementById("taskInput").value = ""
 
-loadTasks()
+            loadTasks()
 
-}
+        }
 
-async function loadTasks(){
+        async function loadTasks() {
 
-const res=await fetch("http://localhost:3000/tasks")
+            const res = await fetch("http://localhost:3000/tasks")
 
-const tasks=await res.json()
+            const tasks = await res.json()
 
-const list=document.getElementById("taskList")
+            const list = document.getElementById("taskList")
 
-list.innerHTML=""
+            list.innerHTML = ""
 
-let completed=0
+            let completed = 0
 
-tasks.forEach(t=>{
+            tasks.forEach(t => {
 
-const li=document.createElement("li")
-li.className="task"
+                const li = document.createElement("li")
+                li.className = "task"
 
-if(t.completed){
-li.classList.add("completed")
-completed++
-}
+                if (t.completed) {
+                    li.classList.add("completed")
+                    completed++
+                }
 
-const left=document.createElement("div")
-left.className="left"
+                const left = document.createElement("div")
+                left.className = "left"
 
-const checkbox=document.createElement("input")
-checkbox.type="checkbox"
-checkbox.checked=t.completed
+                const checkbox = document.createElement("input")
+                checkbox.type = "checkbox"
+                checkbox.checked = t.completed
 
-checkbox.onchange=()=>toggleComplete(t)
+                checkbox.onchange = () => toggleComplete(t)
 
-const span=document.createElement("span")
-span.textContent=t.task
+                const span = document.createElement("span")
+                span.textContent = t.task
 
-left.appendChild(checkbox)
-left.appendChild(span)
+                left.appendChild(checkbox)
+                left.appendChild(span)
 
-const actions=document.createElement("div")
-actions.className="actions"
+                const actions = document.createElement("div")
+                actions.className = "actions"
 
-const editBtn=document.createElement("button")
-editBtn.textContent="Edit"
-editBtn.className="editBtn"
-editBtn.onclick=()=>editTask(t)
+                const editBtn = document.createElement("button")
+                editBtn.textContent = "Edit"
+                editBtn.className = "editBtn"
+                editBtn.onclick = () => editTask(t)
 
-const delBtn=document.createElement("button")
-delBtn.textContent="Delete"
-delBtn.className="deleteBtn"
-delBtn.onclick=()=>deleteTask(t._id)
+                const delBtn = document.createElement("button")
+                delBtn.textContent = "Delete"
+                delBtn.className = "deleteBtn"
+                delBtn.onclick = () => deleteTask(t._id)
 
-actions.appendChild(editBtn)
-actions.appendChild(delBtn)
+                actions.appendChild(editBtn)
+                actions.appendChild(delBtn)
 
-li.appendChild(left)
-li.appendChild(actions)
+                li.appendChild(left)
+                li.appendChild(actions)
 
-list.appendChild(li)
+                list.appendChild(li)
 
-})
+            })
 
-document.getElementById("counter").innerText =
-`Completed ${completed} / ${tasks.length}`
+            document.getElementById("counter").innerText =
+                `Completed ${completed} / ${tasks.length}`
 
-}
+        }
 
-async function deleteTask(id){
+        async function deleteTask(id) {
 
-await fetch("http://localhost:3000/tasks/"+id,{
-method:"DELETE"
-})
+            await fetch("http://localhost:3000/tasks/" + id, {
+                method: "DELETE"
+            })
 
-loadTasks()
+            loadTasks()
 
-}
+        }
 
-async function editTask(task){
+        async function editTask(task) {
 
-const newText=prompt("Edit Task",task.task)
+            const newText = prompt("Edit Task", task.task)
 
-if(!newText || newText.trim()==="") return
+            if (!newText || newText.trim() === "") return
 
-await fetch("http://localhost:3000/tasks/"+task._id,{
+            await fetch("http://localhost:3000/tasks/" + task._id, {
 
-method:"PUT",
+                method: "PUT",
 
-headers:{
-"Content-Type":"application/json"
-},
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-body:JSON.stringify({task:newText})
+                body: JSON.stringify({ task: newText })
 
-})
+            })
 
-loadTasks()
+            loadTasks()
 
-}
+        }
 
-async function toggleComplete(task){
+        async function toggleComplete(task) {
 
-await fetch("http://localhost:3000/tasks/"+task._id,{
+            await fetch("http://localhost:3000/tasks/" + task._id, {
 
-method:"PUT",
+                method: "PUT",
 
-headers:{
-"Content-Type":"application/json"
-},
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-body:JSON.stringify({completed:!task.completed})
+                body: JSON.stringify({ completed: !task.completed })
 
-})
+            })
 
-loadTasks()
+            loadTasks()
 
-}
+        }
 
-loadTasks()
+        loadTasks()
 
-</script>
+    </script>
 
 </body>
 
