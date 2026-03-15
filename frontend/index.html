@@ -123,7 +123,7 @@
 
             if (text === "") return
 
-            await fetch("https://task-to-do-1.onrender.com", {
+            await fetch("https://task-to-do-1.onrender.com/tasks", {
 
                 method: "POST",
 
@@ -143,7 +143,7 @@
 
         async function loadTasks() {
 
-            const res = await fetch("https://task-to-do-1.onrender.com")
+            const res = await fetch("https://task-to-do-1.onrender.com/tasks")
 
             const tasks = await res.json()
 
@@ -208,7 +208,7 @@
 
         async function deleteTask(id) {
 
-            await fetch("https://task-to-do-1.onrender.com" + id, {
+            await fetch("https://task-to-do-1.onrender.com/tasks" + id, {
                 method: "DELETE"
             })
 
@@ -222,7 +222,7 @@
 
             if (!newText || newText.trim() === "") return
 
-            await fetch("https://task-to-do-1.onrender.com" + task._id, {
+            await fetch("https://task-to-do-1.onrender.com/tasks" + task._id, {
 
                 method: "PUT",
 
@@ -240,7 +240,7 @@
 
         async function toggleComplete(task) {
 
-            await fetch("https://task-to-do-1.onrender.com" + task._id, {
+            await fetch("https://task-to-do-1.onrender.com/tasks" + task._id, {
 
                 method: "PUT",
 
