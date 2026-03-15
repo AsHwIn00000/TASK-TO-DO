@@ -7,7 +7,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb+srv://ashwinpreamkumar:Ashwin2007@first.3h30pys.mongodb.net/?appName=FIRSTtaskDB")
+mongoose.connect("mongodb+srv://ashwinpreamkumar:Ashwin2007@first.3h30pys.mongodb.net/taskDB?retryWrites=true&w=majority")
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err))
 
