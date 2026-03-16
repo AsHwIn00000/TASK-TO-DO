@@ -176,7 +176,9 @@
                 checkbox.type = "checkbox"
                 checkbox.checked = t.completed
 
-                checkbox.onchange = () => toggleComplete(t)
+                checkbox.onchange = async () => {
+                    await toggleComplete(t)
+                }
 
                 const span = document.createElement("span")
                 span.textContent = t.task
@@ -258,7 +260,7 @@
 
             })
 
-            loadTasks()
+            await loadTasks()
 
         }
 
