@@ -95,6 +95,11 @@
             background: #ffaa00;
             color: white;
         }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+            color: #90ee90;
+        }
     </style>
 </head>
 
@@ -248,7 +253,7 @@
 
         async function toggleComplete(task) {
 
-            await fetch("https://task-to-do-1.onrender.com/tasks" + task._id + "/" + userId, {
+            await fetch("https://task-to-do-1.onrender.com/tasks/" + task._id + "/" + userId, {
 
                 method: "PUT",
 
