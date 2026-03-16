@@ -7,47 +7,63 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb+srv://ashwinpreamkumar:Ashwin2007@first.3h30pys.mongodb.net/taskDB?retryWrites=true&w=majority")
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err))
+// MongoDB Connection
+mongoose.connect("mongodb+srv://ashwinpreamkumar:Ashwin2007@cluster.mongodb.net/taskDB?retryWrites=true&w=majority")
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log(err))
 
+// Task Schema
 const taskSchema = new mongoose.Schema({
   task: String,
-  completed: Boolean
+  completed: Boolean,
+  userId: String
 })
 
 const Task = mongoose.model("Task", taskSchema)
 
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find()
+
+// GET tasks for specific user
+app.get("/tasks/:userId", async (req, res) => {
+
+  const tasks = await Task.find({ userId: req.params.userId })
+
   res.json(tasks)
+
 })
 
+
+// ADD new task
 app.post("/tasks", async (req, res) => {
 
   const newTask = new Task({
     task: req.body.task,
-    completed: false
+    completed: false,
+    userId: req.body.userId
   })
 
   await newTask.save()
 
-  const tasks = await Task.find()
+  const tasks = await Task.find({ userId: req.body.userId })
 
   res.json(tasks)
+
 })
 
-app.delete("/tasks/:id", async (req, res) => {
+
+// DELETE task
+app.delete("/tasks/:id/:userId", async (req, res) => {
 
   await Task.findByIdAndDelete(req.params.id)
 
-  const tasks = await Task.find()
+  const tasks = await Task.find({ userId: req.params.userId })
 
   res.json(tasks)
 
 })
 
-app.put("/tasks/:id", async (req, res) => {
+
+// EDIT task / TOGGLE completion
+app.put("/tasks/:id/:userId", async (req, res) => {
 
   const task = await Task.findById(req.params.id)
 
@@ -56,12 +72,14 @@ app.put("/tasks/:id", async (req, res) => {
 
   await task.save()
 
-  const tasks = await Task.find()
+  const tasks = await Task.find({ userId: req.params.userId })
 
   res.json(tasks)
 
 })
 
+
+// Server Port
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
