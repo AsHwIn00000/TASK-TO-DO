@@ -149,7 +149,7 @@
 
         async function loadTasks() {
 
-            const res = await fetch("https://task-to-do-1.onrender.com/tasks" + userId)
+            const res = await fetch("https://task-to-do-1.onrender.com/tasks/" + userId)
 
             const tasks = await res.json()
 
@@ -228,7 +228,7 @@
 
             if (!newText || newText.trim() === "") return
 
-            await fetch("https://task-to-do-1.onrender.com/tasks/" + id + "/" + userId, {
+            await fetch("https://task-to-do-1.onrender.com/tasks/" + task._id + "/" + userId, {
 
                 method: "PUT",
 
@@ -246,7 +246,7 @@
 
         async function toggleComplete(task) {
 
-            await fetch("https://task-to-do-1.onrender.com/tasks" + task._id, {
+            await fetch("https://task-to-do-1.onrender.com/tasks" + task._id + "/" + userId, {
 
                 method: "PUT",
 
